@@ -1,7 +1,7 @@
 //TODO - Make SVN and GIT Checkout steps perfect with Jenkins way. Do not use Shell way.
 
 def temporaryDockerRegistry = 'ec2-13-55-19-58.ap-southeast-2.compute.amazonaws.com'
-def permanentDockerRegistry = 'ec2-13-54-206-33.ap-southeast-2.compute.amazonaws.com:5000'
+def permanentDockerRegistry = 'ec2-13-54-206-33.ap-southeast-2.compute.amazonaws.com'
 node {
   //--------------------------------------
   stage('Code Pickup') {
@@ -87,7 +87,7 @@ node {
       //TODO - Danger zone. This approach is not based on grammer. So in case if the CMD is not shell (if exec) or ENTRYPOINT is given, this approach would not work
       def dockerCMD = readFile buildDockerFile
       echo dockerCMD.substring(dockerCMD.indexOf('CMD')+3, dockerCMD.length())      
-      appCompileAndPackageImg.inside {        
+      appCompileAndPackageImg.inside('--net=host') {        
         sh dockerCMD.substring(dockerCMD.indexOf('CMD')+3, dockerCMD.length())
       }
       //End of Danger Zone code      
